@@ -986,12 +986,7 @@ int64_t GetProofOfWorkReward(int64_t nFees)
         int64_t nSubsidy = 520 * COIN;
         return nSubsidy + nFees;
       }      
-    
-	else
-	{
-		nSubsidy = 0.001 * COIN;
-		return nSubsidy + nFees;
-	}	
+      
       
       
     if (fDebug && GetBoolArg("-printcreation"))
@@ -2124,8 +2119,8 @@ bool CBlock::AcceptBlock()
     CBlockIndex* pindexPrev = (*mi).second;
     int nHeight = pindexPrev->nHeight+1;
 
-    /* if (IsProofOfWork() && nHeight > LAST_POW_BLOCK) 
-        return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));*/ 
+    if (IsProofOfWork() && nHeight > LAST_POW_BLOCK)
+        return DoS(100, error("AcceptBlock() : reject proof-of-work at height %d", nHeight));
 
     // Check proof-of-work or proof-of-stake
     if (nBits != GetNextTargetRequired(pindexPrev, IsProofOfStake()))
@@ -2534,9 +2529,9 @@ bool LoadBlockIndex(bool fAllowNew)
         //    CTxOut(empty)
         //  vMerkleTree: 12630d16a9
 
-        const char* pszTimestamp = "Blockchain.info Block #312427 2014-07-25 14:15:16";
+        const char* pszTimestamp = "28";
         CTransaction txNew;
-        txNew.nTime = 1406297716;
+        txNew.nTime = 1446061368;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 0 << CBigNum(42) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
@@ -2546,11 +2541,11 @@ bool LoadBlockIndex(bool fAllowNew)
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1406297716;
+        block.nTime    = 1446061368;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
-        block.nNonce   = !fTestNet ? 190271 : 190271;
+        block.nNonce   = !fTestNet ? 0 : 0;
 
-        if (false && (block.GetHash() != hashGenesisBlock)) {
+        if (true && (block.GetHash() != hashGenesisBlock)) {
 
         // This will figure out a valid hash and Nonce if you're
         // creating a different genesis block:
@@ -2568,7 +2563,7 @@ bool LoadBlockIndex(bool fAllowNew)
         //// debug print
 
 
-        assert(block.hashMerkleRoot == uint256("0xc9c8f6250a60dc79038b9ae68ff747488ac80d4a2db0b194cf49628495448d21"));
+        assert(block.hashMerkleRoot == uint256(""));
 
 
 
